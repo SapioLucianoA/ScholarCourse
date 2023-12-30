@@ -6,66 +6,38 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Teacher {
+public class Teacher extends Person{
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String names, LastName, email,password;
+
 
     @OneToMany(mappedBy = "teacher")
-    private Set<CourseTeacher> courseTeachers = new HashSet<>();
+    private Set<Course> teacherCourses = new HashSet<Course>();
+
 
     public Teacher() {
     }
 
-    public Teacher(String names, String lastName, String email, String password) {
-        this.names = names;
-        LastName = lastName;
-        this.email = email;
-        this.password = password;
+    public Teacher(String name, String lastName, String email, String password) {
+        super(name, lastName, email, password);
     }
 
-    public String getId() {
-        return id;
+    public void addCourse(Course course) {
+        this.teacherCourses.add(course);
+        course.setTeacher(this);
     }
 
-    public String getNames() {
-        return names;
+    public Set<Course> getTeacherCourses() {
+        return teacherCourses;
     }
 
-    public void setNames(String names) {
-        this.names = names;
+    public void setTeacherCourses(Set<Course> teacherCourses) {
+        this.teacherCourses = teacherCourses;
     }
 
-    public String getLastName() {
-        return LastName;
-    }
-
-    public void setLastName(String lastName) {
-        LastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<CourseTeacher> getCourseTeachers() {
-        return courseTeachers;
-    }
-
-    public void setCourseTeachers(Set<CourseTeacher> courseTeachers) {
-        this.courseTeachers = courseTeachers;
+    public void removeCourse(Course course){
+        this.teacherCourses.remove(course);
+        course.setTeacher(null);
     }
 }

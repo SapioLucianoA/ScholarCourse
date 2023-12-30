@@ -1,10 +1,11 @@
 package MindHub.MindHubBackEndCurse.Repositories;
 
-import MindHub.MindHubBackEndCurse.Models.Admin;
+
 import MindHub.MindHubBackEndCurse.Models.Student;
-import MindHub.MindHubBackEndCurse.Models.Teacher;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,5 +18,12 @@ public interface StudentRepository extends JpaRepository<Student,String> {
 
     @Override
     Optional<Student> findById(String id);
-    List<Student> findByNameAndLastName (String name, String lastName);
+    List<Student> findByNameAndLastNameContaining (String name, String lastName);
+    List<Student> findByNameContaining(String name);
+    List<Student> findByLastNameContaining(String lastName);
+
+    @Query("SELECT s FROM Student s JOIN s.courseStudents cs WHERE s.name = :name AND cs.course.courseName = :courseName")
+    List<Student> findByNameAndCourseName(@Param("name") String name, @Param("courseName") String courseName);
+
+
 }

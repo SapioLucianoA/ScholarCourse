@@ -1,15 +1,17 @@
-package MindHub.MindHubBackEndCurse.RecordsAndDTOs;
+package MindHub.MindHubBackEndCurse.DTOs;
+
+import MindHub.MindHubBackEndCurse.Models.Student;
 
 public class StudentDTO {
     private  String id;
     private String name, LastName, email;
 
 
-    public StudentDTO(String id, String name, String lastName, String email) {
-        this.id = id;
-        this.name = name;
-        LastName = lastName;
-        this.email = email;
+    public StudentDTO(Student student) {
+        this.id = student.getId();
+        this.name = student.getName();
+        this.LastName = student.getLastName();
+        this.email = student.getEmail();
     }
 
     public String getId() {

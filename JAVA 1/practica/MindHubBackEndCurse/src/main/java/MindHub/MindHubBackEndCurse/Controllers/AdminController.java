@@ -2,7 +2,7 @@ package MindHub.MindHubBackEndCurse.Controllers;
 
 import MindHub.MindHubBackEndCurse.Models.Admin;
 import MindHub.MindHubBackEndCurse.Models.PasswordValidation;
-import MindHub.MindHubBackEndCurse.RecordsAndDTOs.AdminRecord;
+import MindHub.MindHubBackEndCurse.Records.AdminRecord;
 import MindHub.MindHubBackEndCurse.Repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class AdminController {
     @Autowired
     AdminRepository adminRepository;
 
-    @PostMapping("/Admin")
+    @PostMapping("/create/admin")
     public ResponseEntity<?> CreateAdmin(AdminRecord adminRecord, Authentication authentication){
         if (!adminRepository.existsByEmail(authentication.getName())){
             return new ResponseEntity<>("Action only for Admins", HttpStatus.FORBIDDEN);

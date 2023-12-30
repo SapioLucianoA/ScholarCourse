@@ -15,41 +15,36 @@ public class Course {
     private LocalTime endTime;
     private String courseName;
 
-    private int totalStudents;
+    private Integer totalStudents;
+    private CourseStatus courseStatus;
     @OneToMany(mappedBy = "courseSt")
     private Set<CourseStudent> courseStudents = new HashSet<>();
-    @OneToMany(mappedBy = "course")
-    private Set<CourseTeacher> courseTeachers = new HashSet<>();
+    @ManyToOne
+    private Teacher teacher;
+
 
 
     public Course() {
     }
 
-    public Course(LocalTime startTime, LocalTime endTime, String courseName, int totalStudents) {
+    public Course(LocalTime startTime, LocalTime endTime, String courseName, Integer totalStudents, CourseStatus courseStatus) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.courseName = courseName;
         this.totalStudents = totalStudents;
+        this.courseStatus = courseStatus;
     }
 
     public String getId() {
         return id;
     }
 
-    public int getTotalStudents() {
+    public Integer getTotalStudents() {
         return totalStudents;
     }
 
-    public void setTotalStudents(int totalStudents) {
+    public void setTotalStudents(Integer totalStudents) {
         this.totalStudents = totalStudents;
-    }
-
-    public Set<CourseTeacher> getCourseTeachers() {
-        return courseTeachers;
-    }
-
-    public void setCourseTeachers(Set<CourseTeacher> courseTeachers) {
-        this.courseTeachers = courseTeachers;
     }
 
     public LocalTime getStartTime() {
@@ -84,6 +79,20 @@ public class Course {
         this.courseStudents = courseStudents;
     }
 
+    public CourseStatus getCourseStatus() {
+        return courseStatus;
+    }
 
+    public void setCourseStatus(CourseStatus courseStatus) {
+        this.courseStatus = courseStatus;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher){
+        this.teacher = teacher;
+    }
 
 }

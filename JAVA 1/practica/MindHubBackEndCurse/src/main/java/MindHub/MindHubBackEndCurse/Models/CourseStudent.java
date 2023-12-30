@@ -8,21 +8,21 @@ public class CourseStudent {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     @ManyToOne
-    private Course courseSt;
+    private Course course;
     @ManyToOne
     private Student student;
     private String courseName;
-    private double examGrade;
-    private double projectGrade;
+    private Double examGrade;
+    private Double projectGrade;
     private Integer attendance;
     private Integer absence;
     private CourseStatus courseStatus;
-    private double finalNote;
+    private Double finalNote;
 
     public CourseStudent() {
     }
 
-    public CourseStudent(String courseName, double examGrade, double projectGrade, Integer attendance, Integer absence, CourseStatus courseStatus, double finalNote) {
+    public CourseStudent(String courseName, Double examGrade, Double projectGrade, Integer attendance, Integer absence, CourseStatus courseStatus, Double finalNote) {
         this.courseName = courseName;
         this.examGrade = examGrade;
         this.projectGrade = projectGrade;
@@ -34,6 +34,46 @@ public class CourseStudent {
 
     public String getId() {
         return id;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public Double getExamGrade() {
+        return examGrade;
+    }
+
+    public void setExamGrade(Double examGrade) {
+        this.examGrade = examGrade;
+    }
+
+    public Double getProjectGrade() {
+        return projectGrade;
+    }
+
+    public void setProjectGrade(Double projectGrade) {
+        this.projectGrade = projectGrade;
     }
 
     public Integer getAttendance() {
@@ -60,20 +100,6 @@ public class CourseStudent {
         this.courseStatus = courseStatus;
     }
 
-    public void setFinalNote(double finalNote) {
-        this.finalNote = finalNote;
-    }
-
-
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
     public Double getFinalNote() {
         return finalNote;
     }
@@ -81,38 +107,4 @@ public class CourseStudent {
     public void setFinalNote(Double finalNote) {
         this.finalNote = finalNote;
     }
-
-    public Course getCourseSt() {
-        return courseSt;
-    }
-
-    public void setCourseSt(Course courseSt) {
-        this.courseSt = courseSt;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public double getExamGrade() {
-        return examGrade;
-    }
-
-    public void setExamGrade(double examGrade) {
-        this.examGrade = examGrade;
-    }
-
-    public double getProjectGrade() {
-        return projectGrade;
-    }
-
-    public void setProjectGrade(double projectGrade) {
-        this.projectGrade = projectGrade;
-    }
-
-
 }

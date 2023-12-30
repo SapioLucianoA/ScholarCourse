@@ -21,6 +21,7 @@ public class Authorization {
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
+
                 .anyRequest().authenticated());
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
         http.headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(

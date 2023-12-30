@@ -2,8 +2,8 @@ package MindHub.MindHubBackEndCurse.Controllers;
 
 import MindHub.MindHubBackEndCurse.Models.PasswordValidation;
 import MindHub.MindHubBackEndCurse.Models.Student;
-import MindHub.MindHubBackEndCurse.RecordsAndDTOs.StudentDTO;
-import MindHub.MindHubBackEndCurse.RecordsAndDTOs.StudentRecord;
+import MindHub.MindHubBackEndCurse.DTOs.StudentDTO;
+import MindHub.MindHubBackEndCurse.Records.StudentRecord;
 import MindHub.MindHubBackEndCurse.Repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,8 +22,17 @@ public class StudentController {
     private StudentRepository studentRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @PostMapping("/Student")
-    public ResponseEntity<?> studentCreated(StudentRecord studentRecord){
+
+
+    @GetMapping("/students")
+    public List<StudentDTO> getAllStudents () {
+        List<Student> studentList = studentRepository.findAll();
+        return studentList.stream()
+                .map(StudentDTO::new)
+                .collect(Collectors.toList());
+    }
+    @PostMapping("/create/student")
+    public ResponseEntity<?> studentCreated(@RequestBody StudentRecord studentRecord){
         if (studentRecord.name().isBlank()){
             return new ResponseEntity<>("Please complete the Name", HttpStatus.FORBIDDEN);
         }
@@ -85,13 +94,45 @@ public class StudentController {
     }
 
     @GetMapping("/found/student")
-    public List<StudentDTO> foundStudent(@RequestParam String name, @RequestParam String lastName){
-        List<Student> studentList = studentRepository.findByNameAndLastName(name, lastName);
-        return studentList.stream()
-                .map(student -> new StudentDTO(student.getId(), student.getName(), student.getLastName(), student.getEmail()))
-                .collect(Collectors.toList());
+    public ResponseEntity<?> foundStudent(@RequestParam(required = false) String name, @RequestParam(required = false) String lastName) {
+        if (name != null || lastName != null) {
+            List<Student> studentList = studentRepository.findByNameAndLastNameContaining(name, lastName);
+            List<StudentDTO> students = studentList.stream()
+                    .map(StudentDTO::new)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(students);
+        }
+        if (name != null || lastName == null) {
+            List<Student> studentList = studentRepository.findByNameContaining(name);
+            List<StudentDTO> students = studentList.stream()
+                    .map(StudentDTO::new)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(students);
+        }
+        if (name == null || lastName != null) {
+            List<Student> studentList = studentRepository.findByLastNameContaining(lastName);
+            List<StudentDTO> students = studentList.stream()
+                    .map(StudentDTO::new)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(students);
+        }
+           else {
+                return new ResponseEntity<>("Students not found", HttpStatus.BAD_REQUEST);
+            }
 
     }
+    @GetMapping("find/students")
+    public ResponseEntity<?> findByNameAndCourse(@RequestParam String name, @RequestParam String courseName){
+        List<Student> studentList = studentRepository.findByNameAndCourseName(name, courseName);
+
+        if (studentList.isEmpty()){
+            return new ResponseEntity<>("No students found", HttpStatus.NOT_FOUND);
+        }
+        List<StudentDTO> studentDTOS = studentList.stream()
+                .map(StudentDTO::new).toList();
+        return new ResponseEntity<>(studentDTOS, HttpStatus.OK);
+    }
+
 }
 
 
