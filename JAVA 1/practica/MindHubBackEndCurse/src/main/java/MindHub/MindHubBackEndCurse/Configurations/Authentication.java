@@ -1,9 +1,11 @@
 package MindHub.MindHubBackEndCurse.Configurations;
 
 import MindHub.MindHubBackEndCurse.Models.Admin;
+import MindHub.MindHubBackEndCurse.Models.Person;
 import MindHub.MindHubBackEndCurse.Models.Student;
 import MindHub.MindHubBackEndCurse.Models.Teacher;
 import MindHub.MindHubBackEndCurse.Repositories.AdminRepository;
+import MindHub.MindHubBackEndCurse.Repositories.PersonRepository;
 import MindHub.MindHubBackEndCurse.Repositories.StudentRepository;
 import MindHub.MindHubBackEndCurse.Repositories.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+
 @Configuration
 public class Authentication extends GlobalAuthenticationConfigurerAdapter {
 
@@ -26,39 +30,30 @@ public class Authentication extends GlobalAuthenticationConfigurerAdapter {
     private TeacherRepository teacherRepository;
     @Autowired
     private AdminRepository adminRepository;
+    @Autowired
+    private PersonRepository personRepository;
 
     @Override
     public void init(AuthenticationManagerBuilder auth) throws Exception {
 
         auth.userDetailsService(inputName-> {
 
-            if (studentRepository.existsByEmail(inputName)){
-                Student student = studentRepository.findByEmail(inputName);
+            Person person = personRepository.findByEmail(inputName);
 
-                return new User(student.getEmail(), student.getPassword(),
-
-                        AuthorityUtils.createAuthorityList("STUDENT"));
+            if (person instanceof Admin){
+                return new User(person.getEmail(), person.getPassword(), AuthorityUtils.createAuthorityList("ADMIN"));
             }
-            if (teacherRepository.existsByEmail(inputName)){
-                Teacher teacher = teacherRepository.findByEmail(inputName);
-                return new User(teacher.getEmail(), teacher.getPassword(),
-
-                        AuthorityUtils.createAuthorityList("TEACHER"));
+            if (person instanceof Teacher){
+                return new User(person.getEmail(), person.getPassword(), AuthorityUtils.createAuthorityList("TEACHER"));
             }
-            if (adminRepository.existsByEmail(inputName)){
-                Admin admin = adminRepository.findByEmail(inputName);
-                return new User(admin.getEmail(), admin.getPassword(),
-
-                        AuthorityUtils.createAuthorityList("ADMIN"));
-            }
-            else {
-
-                throw new UsernameNotFoundException("User mail not found: " + inputName);
-
+            if (person instanceof Student){
+                return new User(person.getEmail(), person.getPassword(), AuthorityUtils.createAuthorityList("STUDENT"));
             }
 
+            throw new UsernameNotFoundException("User mail not found: " + inputName);
         });
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
 

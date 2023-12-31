@@ -19,6 +19,21 @@ public class Authorization {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(HttpMethod.GET, "/api/admins","/api/teachers","/api/students","/api/courses").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/create/admin", "/api/create/teacher", "api/create/course").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/edit/admin").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/remove/admin","/api/remove/teacher","/api/remove/student", "/api/remove/course").hasAuthority("ADMIN")
+
+                .requestMatchers(HttpMethod.GET,"/api/course/students").hasAnyAuthority("ADMIN","TEACHER")
+                .requestMatchers(HttpMethod.PUT,"/api/edit/teacher", "/api/edit/course", "/api/notes").hasAnyAuthority("ADMIN", "TEACHER")
+
+                .requestMatchers(HttpMethod.POST, "/api/create/curse").hasAuthority("TEACHER")
+
+                .requestMatchers(HttpMethod.POST, "/api/create/student").authenticated()
+                .requestMatchers(HttpMethod.POST, "api/inscription").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/api/edit/student").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/found/students", "api/find/students").authenticated()
+
                 .requestMatchers("/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
 

@@ -52,7 +52,7 @@ public class CourseController {
 
     }
 
-    @PutMapping("edit/course")
+    @PutMapping("/edit/course")
     public ResponseEntity<?> editCourse(@RequestParam String id, @RequestParam(required = false) String courseName, @RequestParam(required = false) Integer totalStudents, @RequestParam(required = false)LocalTime startTime, @RequestParam(required = false) LocalTime endTime, @RequestParam(required = false) String teacherId){
         Optional<Course> course = courseRepository.findById(id);
         if (!course.isPresent()){
@@ -83,7 +83,7 @@ public class CourseController {
         courseRepository.save(course1);
         return new ResponseEntity<>("Changes saved!", HttpStatus.OK);
     }
-    @PutMapping("/delete/course")
+    @PutMapping("/remove/course")
     public  ResponseEntity<?> deleteCourse(@RequestParam String id){
         Optional<Course> course = courseRepository.findById(id);
         if (!course.isPresent()){

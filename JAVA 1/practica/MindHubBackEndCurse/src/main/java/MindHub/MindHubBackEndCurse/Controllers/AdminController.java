@@ -1,5 +1,6 @@
 package MindHub.MindHubBackEndCurse.Controllers;
 
+import MindHub.MindHubBackEndCurse.DTOs.AdminDTO;
 import MindHub.MindHubBackEndCurse.Models.Admin;
 import MindHub.MindHubBackEndCurse.Models.PasswordValidation;
 import MindHub.MindHubBackEndCurse.Records.AdminRecord;
@@ -11,7 +12,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -21,6 +24,13 @@ public class AdminController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     AdminRepository adminRepository;
+
+    @GetMapping("/admins")
+    public List<AdminDTO> getAllAdmins(){
+        List<Admin> adminList = adminRepository.findAll();
+        return adminList.stream().map(AdminDTO::new)
+                .collect(Collectors.toList());
+    }
 
     @PostMapping("/create/admin")
     public ResponseEntity<?> CreateAdmin(AdminRecord adminRecord, Authentication authentication){
@@ -49,7 +59,7 @@ public class AdminController {
         return new ResponseEntity<>("Admin Created", HttpStatus.I_AM_A_TEAPOT);
     }
 
-    @PostMapping("/delete/admin")
+    @PostMapping("/remove/admin")
     public ResponseEntity<?> deleteAdmin(@RequestParam String name, @RequestParam String lastName){
            Admin admin = adminRepository.findByEmailAndLastName(name, lastName);
 
@@ -57,7 +67,7 @@ public class AdminController {
            return new ResponseEntity<>("Admin delete", HttpStatus.OK);
     }
 
-    @PatchMapping("/patch/admin/")
+    @PutMapping("/edit/admin")
     public ResponseEntity<?> changePasswordAdmin (@RequestParam String id, @RequestParam(required = false)String name,@RequestParam(required = false) String lastName, @RequestParam(required = false) String email, @RequestParam(required = false) String password){
 
         Optional<Admin> adminOptional = adminRepository.findById(id);

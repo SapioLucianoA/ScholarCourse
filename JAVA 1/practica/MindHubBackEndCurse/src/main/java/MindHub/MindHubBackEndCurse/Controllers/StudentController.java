@@ -1,9 +1,11 @@
 package MindHub.MindHubBackEndCurse.Controllers;
 
+import MindHub.MindHubBackEndCurse.Models.CourseStudent;
 import MindHub.MindHubBackEndCurse.Models.PasswordValidation;
 import MindHub.MindHubBackEndCurse.Models.Student;
 import MindHub.MindHubBackEndCurse.DTOs.StudentDTO;
 import MindHub.MindHubBackEndCurse.Records.StudentRecord;
+import MindHub.MindHubBackEndCurse.Repositories.CourseStudentRepository;
 import MindHub.MindHubBackEndCurse.Repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,6 +25,8 @@ public class StudentController {
     private StudentRepository studentRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private CourseStudentRepository courseStudentRepository;
 
 
     @GetMapping("/students")
@@ -52,13 +57,14 @@ public class StudentController {
         studentRepository.save(student);
         return  new ResponseEntity<>("Your profile is created", HttpStatus.CREATED);
     }
-    @PostMapping("/delete/student")
+    @PostMapping("/remove/student")
     public ResponseEntity<?> deleteStudent (@RequestParam String id){
 
         Optional<Student> studentOptional = studentRepository.findById(id);
         if (studentOptional.isPresent()){
             Student student = studentOptional.get();
-
+            Set<CourseStudent> courseStudentSet =  student.getCourseStudents();
+            courseStudentSet.forEach(courseStudent -> courseStudentRepository.deleteById(courseStudent.getId()));
             studentRepository.delete(student);
             return new ResponseEntity<>("student is delete", HttpStatus.OK);
         }else {
@@ -66,7 +72,7 @@ public class StudentController {
         }
 
     }
-    @PatchMapping("/patch/student")
+    @PutMapping("/edit/student")
     public ResponseEntity<?> changeStudent(@RequestParam String id,@RequestParam(required = false)String name,@RequestParam(required = false)String lastName, @RequestParam(required = false)String email,@RequestParam(required = false)String password) {
     Optional<Student> studentOptional = studentRepository.findById(id);
     if (studentOptional.isPresent()){
@@ -93,7 +99,7 @@ public class StudentController {
     }
     }
 
-    @GetMapping("/found/student")
+    @GetMapping("/found/students")
     public ResponseEntity<?> foundStudent(@RequestParam(required = false) String name, @RequestParam(required = false) String lastName) {
         if (name != null || lastName != null) {
             List<Student> studentList = studentRepository.findByNameAndLastNameContaining(name, lastName);
@@ -102,14 +108,14 @@ public class StudentController {
                     .collect(Collectors.toList());
             return ResponseEntity.ok(students);
         }
-        if (name != null || lastName == null) {
+        if (name != null) {
             List<Student> studentList = studentRepository.findByNameContaining(name);
             List<StudentDTO> students = studentList.stream()
                     .map(StudentDTO::new)
                     .collect(Collectors.toList());
             return ResponseEntity.ok(students);
         }
-        if (name == null || lastName != null) {
+        if (lastName != null) {
             List<Student> studentList = studentRepository.findByLastNameContaining(lastName);
             List<StudentDTO> students = studentList.stream()
                     .map(StudentDTO::new)

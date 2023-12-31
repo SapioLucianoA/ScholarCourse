@@ -6,55 +6,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Admin {
+public class Admin extends Person {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String name, lastName, email,password;
 
     public Admin() {
     }
 
     public Admin(String name, String lastName, String email, String password) {
-        this.name = name;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
+        super(name, lastName, email, password);
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String names) {
-        this.name = names;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

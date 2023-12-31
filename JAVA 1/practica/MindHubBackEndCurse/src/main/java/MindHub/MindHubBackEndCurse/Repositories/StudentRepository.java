@@ -15,11 +15,12 @@ public interface StudentRepository extends JpaRepository<Student,String> {
     boolean existsByEmail(String email);
     Student findByEmail (String email);
 
-
-    @Override
     Optional<Student> findById(String id);
+
     List<Student> findByNameAndLastNameContaining (String name, String lastName);
+
     List<Student> findByNameContaining(String name);
+
     List<Student> findByLastNameContaining(String lastName);
 
     @Query("SELECT s FROM Student s JOIN s.courseStudents cs WHERE s.name = :name AND cs.course.courseName = :courseName")

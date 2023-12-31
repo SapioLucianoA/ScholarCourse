@@ -17,7 +17,7 @@ public class Course {
 
     private Integer totalStudents;
     private CourseStatus courseStatus;
-    @OneToMany(mappedBy = "courseSt")
+    @OneToMany(mappedBy = "course")
     private Set<CourseStudent> courseStudents = new HashSet<>();
     @ManyToOne
     private Teacher teacher;

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class TeacherDTO {
     private String id;
-    private String names, LastName, email;
+    private String name, LastName, email;
 
 
     private Set<String> courseNames;
@@ -20,7 +20,7 @@ public class TeacherDTO {
 
     public TeacherDTO(Teacher teacher) {
         this.id = teacher.getId();
-        this.names = teacher.getNames();
+        this.name = teacher.getName();
         this.LastName = teacher.getLastName();
         this.email = teacher.getEmail();
         this.courseNames = teacher.getTeacherCourses().stream().map(course -> course.getCourseName()).collect(Collectors.toSet());
@@ -31,35 +31,19 @@ public class TeacherDTO {
         return id;
     }
 
-    public String getNames() {
-        return names;
-    }
-
-    public void setNames(String names) {
-        this.names = names;
+    public String getName() {
+        return name;
     }
 
     public String getLastName() {
         return LastName;
     }
 
-    public void setLastName(String lastName) {
-        LastName = lastName;
-    }
-
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public Set<String> getCourseNames() {
         return courseNames;
-    }
-
-    public void setCourseNames(Set<String> courseNames) {
-        this.courseNames = courseNames;
     }
 }

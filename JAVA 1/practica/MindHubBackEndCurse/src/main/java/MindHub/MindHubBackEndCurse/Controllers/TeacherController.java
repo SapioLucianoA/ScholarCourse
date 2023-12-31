@@ -75,7 +75,7 @@ public class TeacherController {
         return new ResponseEntity<>("Changes saved!", HttpStatus.OK);
 
     }
-    @PostMapping("/delete/teacher")
+    @PostMapping("/remove/teacher")
     public ResponseEntity<?> deleteTeacher(@RequestParam String teacherId){
         Optional<Teacher> teacherOptional = teacherRepository.findById(teacherId);
         if (!teacherOptional.isPresent()){

@@ -1,5 +1,6 @@
 package MindHub.MindHubBackEndCurse.Controllers;
 
+import MindHub.MindHubBackEndCurse.DTOs.CourseStudentDTO;
 import MindHub.MindHubBackEndCurse.DTOs.StudentDTO;
 import MindHub.MindHubBackEndCurse.Models.Course;
 import MindHub.MindHubBackEndCurse.Models.CourseStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -27,6 +29,13 @@ public class CourseStudentController {
     private AdminRepository adminRepository;
     @Autowired
     private CourseStudentRepository courseStudentRepository;
+
+
+    @GetMapping("/course/students")
+    public List<CourseStudentDTO> allCourseStudents(){
+        List<CourseStudent> courseStudentList = courseStudentRepository.findAll();
+        return courseStudentList.stream().map(CourseStudentDTO::new).collect(Collectors.toList());
+    }
 
     @PostMapping("/inscription")
     public ResponseEntity<?> inscriptionStudent(@RequestParam String studentId, @RequestParam String courseId){
