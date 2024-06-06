@@ -128,8 +128,8 @@ public class StudentController {
 
     }
     @GetMapping("find/students")
-    public ResponseEntity<?> findByNameAndCourse(@RequestParam String name, @RequestParam String courseName){
-        List<Student> studentList = studentRepository.findByNameAndCourseName(name, courseName);
+    public ResponseEntity<?> findByLastNameAndCourse(@RequestParam String lastName, @RequestParam String courseName){
+        List<Student> studentList = studentRepository.findByLastNameAndCourseName(lastName, courseName);
 
         if (studentList.isEmpty()){
             return new ResponseEntity<>("No students found", HttpStatus.NOT_FOUND);

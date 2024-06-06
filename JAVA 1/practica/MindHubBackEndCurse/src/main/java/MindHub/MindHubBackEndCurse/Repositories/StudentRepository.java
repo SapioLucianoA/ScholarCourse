@@ -23,8 +23,8 @@ public interface StudentRepository extends JpaRepository<Student,String> {
 
     List<Student> findByLastNameContaining(String lastName);
 
-    @Query("SELECT s FROM Student s JOIN s.courseStudents cs WHERE s.name = :name AND cs.course.courseName = :courseName")
-    List<Student> findByNameAndCourseName(@Param("name") String name, @Param("courseName") String courseName);
+    @Query("SELECT s FROM Student s JOIN s.courseStudents cs WHERE s.lastName = :lastName AND cs.course.courseName = :courseName")
+    List<Student> findByLastNameAndCourseName(@Param("lastName") String lastName, @Param("courseName") String courseName);
 
 
 }
